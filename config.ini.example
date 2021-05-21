@@ -1,0 +1,66 @@
+; config.ini
+; Requires configparser library: https://github.com/jaraco/configparser/
+
+
+[App Settings]
+; Run Mode (DEV | PROD | LOCAL_TEST)
+run_mode        : LOCAL_TEST
+; Log level (TRACE | DEBUG | INFO | SUCCESS | WARNING | ERROR | CRITICAL | QUIET)
+log_level       : DEBUG
+
+[Syslog]
+; External syslog server
+host            : ####################
+port            : #################### 
+
+[Translator Settings]
+; Requires deep-translator libeary: https://pypi.org/project/deep-translator/
+; valid translators are GoogleTranslator, GoogleTranslator, MicrosoftTranslator, PonsTranslator, LingueeTranslator, MyMemoryTranslator, YandexTranslator, DeepL, QCRI
+translator   : GoogleTranslator
+to_lang     : en
+
+
+[Detect Language]
+; https://detectlanguage.com/
+api_key     : ####################
+
+[DeepL]
+; https://www.deepl.com/
+api_key     : ####################
+
+
+[SMTP]
+; Using AWS SES for SMTP
+aws_ses_user            : ses-smtp-user.####################
+smtp_server             : email-smtp.us-east-1.amazonaws.com
+smtp_user               : ####################
+smtp_password           : ####################/UOkl7
+smtp_name               : Service Bot
+smtp_sender             : ServiceBot@foo.bar
+
+
+[SNOW API]
+; https://docs.servicenow.com/bundle/paris-application-development/page/build/applications/concept/api-rest.html
+; Requires pysnow library: https://pysnow.readthedocs.io/en/latest/
+; ServiceNow Instance
+instance                : yourInstance
+; ServiceNow API user
+user                    : your.user
+; ServiceNow API password
+password                : ####################
+
+[SNOW Tables]
+incident                : /table/incident
+
+[SNOW Incident Details]
+company                 : f0ce214bdb124300c66fd5ab5e9619ce
+caller_id               : 904b0bdedb71c300ed30572e5e9619a3
+opened_by               : your.user
+contact_type            : email
+category                : Your Category
+u_account_executive     : 745247c3db5e1700f2d879668c96199e
+; Passed from parsed supoort@foo.bar email
+; u_caller
+; u_caller_phone_number
+; u_caller_email
+

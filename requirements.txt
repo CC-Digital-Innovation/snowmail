@@ -1,0 +1,8 @@
+configparser
+python-magic-bin
+SMTPEmail
+pysnow
+docopt
+loguru
+deep-translator
+Pygments
