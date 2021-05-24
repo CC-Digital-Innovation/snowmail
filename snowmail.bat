@@ -21,14 +21,46 @@ call %CONDAPATH%\Scripts\activate.bat %ENVPATH%
 rem Change working directory to app director
 call cd C:\local\src\dev\snowmail
 
-rem Run a python script in that environment
-call python snowmail.py %1 --name %2 --email %3 --subject %4 --body %5
+rem Variables
+set NAME=%1
+set SUBJECT=%2
+set BODY=%3
+set EMAIL=%4
+set SUBJECT_CMD=%5
+set SUBJECT_INC=%6
+set BODY_CMD=%7
+set BODY_INC=%8
 
-rem Deactivate the environment
-call conda deactivate
+if /i %SUBJECT_CMD%=="status" set CMD="status"
+if /i %BODY_CMD%=="status" set CMD="status"
+if /i %SUBJECT_CMD%=="update" set CMD="update"
+if /i %BODY_CMD%=="update" set CMD="update"
 
-rem Close command prompt window
-exit
+set INC=%SUBJECT_INC%
+
+rem What action is being prefromed?
+IF /i %CMD%=="status" goto CASE_STATUS
+IF /i %CMD%=="update" goto CASE_STATUS
+ELSE goto CASE_CREATE
+
+rem Case statements
+:CASE_STATUS
+    rem Run a python script in that environment
+    call python snowmail.py %CMD% --incident %INC% --name %NAME%  --email %EMAIL%
+    GOTO END
+:CASE_UPDAE
+    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    GOTO END
+:CASE_CREASE
+    call python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    GOTO END
+
+:END
+    rem Deactivate the environment
+    call conda deactivate
+
+    rem Close command prompt window
+    exit
 
 rem If conda is directly available from the command line then the following code works.
 rem call activate someenv

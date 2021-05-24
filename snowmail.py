@@ -147,6 +147,7 @@ def status(inc_number, sender_name, sender_email):
     inc_status = status_inc(inc_number)
     if (LOG_LEVEL == "TRACE") or (LOG_LEVEL == "DEBUG"):
         print_json(inc_status)
+    send_status(sender_name, sender_email, inc_number, inc_status)
 
 
 @logger.catch
@@ -265,18 +266,30 @@ def send_ack(sender_name, sender_email, ack_subject, ack_native_message, ack_en_
     ack_message = (ack_native_message + ack_en_message)
     logger.debug(ack_subject)
     logger.debug(ack_message)
+    smtp(sender_name, sender_email, ack_subject, ack_message)
+
+
+@logger.catch
+def send_status(sender_name, sender_email, incident, status):
+    subject = 'MSA SmartTech Support Incident {incident} Status'.format(
+        incident=incident)
+    message = json.dumps(status)
+    smtp(sender_name, sender_email, subject, message)
+
+
+def smtp(name, email, subject, message):
     client = SMTP(
         SMTP_server=SMTP_SERVER,
         SMTP_account=SMTP_USER,
         SMTP_password=SMTP_PASSWORD
     )
     client.create_mime(
-        recipient_email_addr=sender_email,
+        recipient_email_addr=email,
         sender_email_addr=SMTP_SENDER,
-        subject=ack_subject,
+        subject=subject,
         sender_display_name=SMTP_NAME,
-        recipient_display_name=sender_name,
-        content_text=ack_message
+        recipient_display_name=name,
+        content_text=message
     )
     client.send_msg()
 

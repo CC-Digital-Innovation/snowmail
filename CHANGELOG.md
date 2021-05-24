@@ -6,6 +6,16 @@
   - Function to parse phone numbers (need to think about the regex I am going to use)
   - Cleanup docopt documentation
 
+## [0.0.7] - 2021-05-24
+
+### Added
+
+- Added status function
+
+### Changed
+
+- Change how parsing is done, and how variables are passed to the python script from the batch file wrapper to allow for status, update and create logic
+
 ## [0.0.6] - 2021-05-21
 
 ### Fixed
