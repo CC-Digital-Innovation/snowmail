@@ -135,14 +135,14 @@ def create(sender_name, sender_email, short_description, long_description):
 @logger.catch
 def update(inc_number, sender_name, sender_email, short_description, long_description):
     # TODO: Update function
-    logger.info("TODO")
+    logger.debug("Update function")
     email_check(sender_email)
-
+    update_inc(sender_name, sender_email, inc_number, long_description)
 
 @logger.catch
 def status(inc_number, sender_name, sender_email):
     # TODO: Status function
-    logger.info("TODO")
+    logger.debug("Status function")
     email_check(sender_email)
     inc_status = status_inc(inc_number)
     if (LOG_LEVEL == "TRACE") or (LOG_LEVEL == "DEBUG"):
@@ -274,6 +274,7 @@ def send_status(sender_name, sender_email, incident, status):
     subject = 'MSA SmartTech Support Incident {incident} Status'.format(
         incident=incident)
     message = json.dumps(status)
+    # TODO: Parse JSON and format status response email
     smtp(sender_name, sender_email, subject, message)
 
 
@@ -335,7 +336,7 @@ def create_inc(sender_name, sender_email, short_description, long_description):
 
 
 @logger.catch
-def update_inc(sender_name, sender_email, short_description, long_description):
+def update_inc(sender_name, sender_email, inc_number, comment):
     # TODO: Create SNOW update function
     logger.info ("Incident update")
 
@@ -343,10 +344,11 @@ def update_inc(sender_name, sender_email, short_description, long_description):
     incident = snow_incident_client()
 
     # Set the payload
-    update = {'short_description': 'New short description', 'state': 5}
+    update = {"comments": comment}
 
     # Update 'short_description' and 'state' for 'INC012345'
-    updated_record = incident.update(query={'number': 'INC012345'}, payload=update)
+    # updated_record = incident.update(payload=update)
+    incident.update(query={'number': inc_number}, payload=update)
 
 
 @logger.catch

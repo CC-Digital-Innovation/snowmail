@@ -35,12 +35,12 @@ if /i %SUBJECT_CMD%=="status" set CMD="status"
 if /i %BODY_CMD%=="status" set CMD="status"
 if /i %SUBJECT_CMD%=="update" set CMD="update"
 if /i %BODY_CMD%=="update" set CMD="update"
-
-set INC=%SUBJECT_INC%
+if NOT /i %SUBJECT_INC%=="" set INC=%SUBJECT_INC%
+if NOT /i %BODY_INC%=="" set INC=%BODY_INC%
 
 rem What action is being prefromed?
 IF /i %CMD%=="status" goto CASE_STATUS
-IF /i %CMD%=="update" goto CASE_STATUS
+IF /i %CMD%=="update" goto CASE_UPDATE
 ELSE goto CASE_CREATE
 
 rem Case statements
@@ -48,10 +48,10 @@ rem Case statements
     rem Run a python script in that environment
     call python snowmail.py %CMD% --incident %INC% --name %NAME%  --email %EMAIL%
     GOTO END
-:CASE_UPDAE
+:CASE_UPDATE
     call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
     GOTO END
-:CASE_CREASE
+:CASE_CREATE
     call python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
     GOTO END
 
