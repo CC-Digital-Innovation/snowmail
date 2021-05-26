@@ -1,4 +1,12 @@
 @echo OFF
+
+@REM Set applicaiton root
+set app_root="C:\local\src\dev\snowmail"
+
+@REM Set data and time for debug output
+for /F "tokens=2" %%i in ('date /t') do set mydate=%%i
+set mytime=%time%
+
 rem How to run a Python script in a given conda environment from a batch file.
 
 rem It doesn't require:
@@ -19,9 +27,11 @@ rem Using call is required here, see: https://stackoverflow.com/questions/246781
 call %CONDAPATH%\Scripts\activate.bat %ENVPATH%
 
 rem Change working directory to app director
-call cd C:\local\src\dev\snowmail
+call cd %app_root%
+@REM DEBUG
+echo "%mydate%:%mytime% | DEBUG | App root: %app_root%"
 
-rem Variables
+@REM Variables
 set NAME=%1
 set SUBJECT=%2
 set BODY=%3
@@ -31,36 +41,66 @@ set SUBJECT_INC=%6
 set BODY_CMD=%7
 set BODY_INC=%8
 
-if /i %SUBJECT_CMD%=="status" set CMD="status"
-if /i %BODY_CMD%=="status" set CMD="status"
-if /i %SUBJECT_CMD%=="update" set CMD="update"
-if /i %BODY_CMD%=="update" set CMD="update"
-if NOT /i %SUBJECT_INC%=="" set INC=%SUBJECT_INC%
-if NOT /i %BODY_INC%=="" set INC=%BODY_INC%
+@REM DEBUG
+@echo "%mydate%:%mytime% | DEBUG | Name: %NAME%"
+@echo "%mydate%:%mytime% | DEBUG | Subject: %SUBJECT%"
+@echo "%mydate%:%mytime% | DEBUG | Body: %BODY%"
+@echo "%mydate%:%mytime% | DEBUG | Email: %EMAIL%"
+@echo "%mydate%:%mytime% | DEBUG | Subject CMD: %SUBJECT_CMD%"
+@echo "%mydate%:%mytime% | DEBUG | Subject INC: %SUBJECT_INC%"
+@echo "%mydate%:%mytime% | DEBUG | Body CMD: %BODY_CMD%"
+@echo "%mydate%:%mytime% | DEBUG | Body INC: %BODY_INC%"
 
-rem What action is being prefromed?
-IF /i %CMD%=="status" goto CASE_STATUS
-IF /i %CMD%=="update" goto CASE_UPDATE
-ELSE goto CASE_CREATE
+@REM Set CMD and INC varaibles
+if NOT %SUBJECT_CMD%=="" set CMD=%SUBJECT_CMD%
+if NOT %BODY_CMD%=="" set CMD=%BODY_CMD%
+IF NOT DEFINED CMD (set CMD="create")
+if NOT %SUBJECT_INC%=="" set INC=%SUBJECT_INC%
+if NOT %BODY_INC%=="" set INC=%BODY_INC%
 
-rem Case statements
-:CASE_STATUS
+@REM DEBUG
+@echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%"
+@echo "%mydate%:%mytime% | DEBUG | INC: %INC%"
+
+@REM Remove quotes from CMD
+CALL :dequote CMD
+@echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%"
+@REM Call CMD function
+GOTO :%CMD%
+
+
+EXIT /b %ERRORLEVEL%
+
+
+@REM Functions
+
+:dequote
+    for /f "delims=" %%A in ('echo %%%1%%') do set %1=%%~A
+    EXIT /b 0
+
+:status
     rem Run a python script in that environment
-    call python snowmail.py %CMD% --incident %INC% --name %NAME%  --email %EMAIL%
-    GOTO END
-:CASE_UPDATE
-    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
-    GOTO END
-:CASE_CREATE
-    call python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
-    GOTO END
+    echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%"
+    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL%
+    GOTO :END
 
-:END
+:update
+    echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
+    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    GOTO :END
+
+:create
+    echo "%mydate%:%mytime% | DEBUG | %CMD%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
+    call python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    GOTO :END
+
+:end
     rem Deactivate the environment
     call conda deactivate
 
     rem Close command prompt window
     exit
+
 
 rem If conda is directly available from the command line then the following code works.
 rem call activate someenv
@@ -69,3 +109,5 @@ rem conda deactivate
 
 rem One could also use the conda run command
 rem conda run -n someenv python script.py
+
+

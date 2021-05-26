@@ -6,6 +6,16 @@
   - Function to parse phone numbers (need to think about the regex I am going to use)
   - Cleanup docopt documentation
 
+## [0.0.8] - 2021-05-26
+
+### Added
+
+- v1 of formatted status update reply
+
+### Fixed
+
+- Various fixes and code cleanup
+
 ## [0.0.7] - 2021-05-24
 
 ### Added

@@ -270,10 +270,46 @@ def send_ack(sender_name, sender_email, ack_subject, ack_native_message, ack_en_
 
 
 @logger.catch
+def priority_lookup(argument):
+    logger.debug(argument)
+    switcher = {
+        0: "Catastrophic",
+        1: "High",
+        2: "Medium",
+        3: "Low"
+    }
+    p = switcher.get(argument, "Invalid priority")
+    logger.debug(p)
+    return (p)
+
+
+@logger.catch
 def send_status(sender_name, sender_email, incident, status):
     subject = 'MSA SmartTech Support Incident {incident} Status'.format(
         incident=incident)
-    message = json.dumps(status)
+    message_dict = status
+    incident_number = (message_dict['number'])
+    p = priority_lookup(int(message_dict['priority']))
+    u_msa_status = (message_dict['u_msa_status'])
+    opened_at = (message_dict['opened_at'])
+    short_description = (message_dict['short_description'])
+    description = (message_dict['description'])
+    u_fedex_caller = (message_dict['u_fedex_caller'])
+    u_msa_caller_email = (message_dict['u_msa_caller_email'])
+    u_callers_phone_number = (message_dict['u_callers_phone_number'])
+    message = textwrap.dedent('''\
+                            \n
+                            Incident Number: {incident_number}
+                            Priority: {priority}
+                            Status: {u_msa_status}
+                            Opened: {opened_at}
+                            Short Description: {short_description}
+                            Description: {description}
+                            Contact Name: {u_fedex_caller}
+                            Contact Email: {u_msa_caller_email}
+                            Contact Phone Number: {u_callers_phone_number}\
+                            ''').format(incident_number=incident_number, priority=p, u_msa_status=u_msa_status, opened_at=opened_at, short_description=short_description, description=description, u_fedex_caller=u_fedex_caller, u_msa_caller_email=u_msa_caller_email, u_callers_phone_number=u_callers_phone_number)
+
     # TODO: Parse JSON and format status response email
     smtp(sender_name, sender_email, subject, message)
 
