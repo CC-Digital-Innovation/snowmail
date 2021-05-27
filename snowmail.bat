@@ -1,4 +1,4 @@
-@echo OFF
+@echo ON
 
 @REM Set applicaiton root
 set app_root="C:\local\src\dev\snowmail"
@@ -31,7 +31,9 @@ call cd %app_root%
 @REM DEBUG
 echo "%mydate%:%mytime% | DEBUG | App root: %app_root%"
 
+
 @REM Variables
+set CMD=""
 set NAME=%1
 set SUBJECT=%2
 set BODY=%3
@@ -40,6 +42,7 @@ set SUBJECT_CMD=%5
 set SUBJECT_INC=%6
 set BODY_CMD=%7
 set BODY_INC=%8
+
 
 @REM DEBUG
 @echo "%mydate%:%mytime% | DEBUG | Name: %NAME%"
@@ -52,46 +55,50 @@ set BODY_INC=%8
 @echo "%mydate%:%mytime% | DEBUG | Body INC: %BODY_INC%"
 
 @REM Set CMD and INC varaibles
-if NOT %SUBJECT_CMD%=="" set CMD=%SUBJECT_CMD%
-if NOT %BODY_CMD%=="" set CMD=%BODY_CMD%
-IF NOT DEFINED CMD (set CMD="create")
-if NOT %SUBJECT_INC%=="" set INC=%SUBJECT_INC%
-if NOT %BODY_INC%=="" set INC=%BODY_INC%
+if /i %SUBJECT_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | SUbject CMD: NULL")
+if /i %BODY_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
+if /i %SUBJECT_CMD%=="update" (set CMD="update") else (echo "%mydate%:%mytime% | DEBUG | SUbject CMD: NULL")
+if /i %BODY_CMD%=="update" (set CMD="update") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
+if /i %CMD%=="" (set CMD="create") else (echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%")
+
+if /i %SUBJECT_INC%=="" (echo "%mydate%:%mytime% | DEBUG | SUbject INC: NULL") else (set INC=%SUBJECT_INC%)
+if /i %BODY_INC%=="" (echo "%mydate%:%mytime% | DEBUG | BODY INC: NULL") else (set INC=%BODY_INC%)
 
 @REM DEBUG
 @echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%"
 @echo "%mydate%:%mytime% | DEBUG | INC: %INC%"
 
 @REM Remove quotes from CMD
-CALL :dequote CMD
+call :dequote CMD
 @echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%"
 @REM Call CMD function
 GOTO :%CMD%
 
-
-EXIT /b %ERRORLEVEL%
-
+exit /b %ERRORLEVEL%
 
 @REM Functions
 
 :dequote
     for /f "delims=" %%A in ('echo %%%1%%') do set %1=%%~A
-    EXIT /b 0
+    exit /b %ERRORLEVEL%
 
 :status
     rem Run a python script in that environment
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%"
-    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL%
+    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL%
+    echo %ERRORLEVEL%
     GOTO :END
 
 :update
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
-    call python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    echo %ERRORLEVEL%
     GOTO :END
 
 :create
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
-    call python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    start /wait python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    echo %ERRORLEVEL%
     GOTO :END
 
 :end
@@ -99,7 +106,14 @@ EXIT /b %ERRORLEVEL%
     call conda deactivate
 
     rem Close command prompt window
-    exit
+    exit /b %ERRORLEVEL%
+
+
+rem Deactivate the environment
+call conda deactivate
+
+rem Close command prompt window
+exit /b %ERRORLEVEL%
 
 
 rem If conda is directly available from the command line then the following code works.

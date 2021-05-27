@@ -3,8 +3,20 @@
 ## [Unreleased]
 
 - TODO
-  - Function to parse phone numbers (need to think about the regex I am going to use)
+  - Function to parse phone numbers (need to think about the regex I am going to use given various different phone number formats and user input variances)
   - Cleanup docopt documentation
+  - Add all comments to status ack message
+  - Add more detail to status ack (e.g. - incident age)
+  - Status and language translation
+  - Update ack message which contains all comment details, current update and status information
+  - Update ack message language translation
+
+## [0.0.9] - 2021-05-27
+
+### Fixed
+
+- Batch file wrapper conditional logic
+- bg process not properly returning exit code to fg process, which was causing the fg process to hang
 
 ## [0.0.8] - 2021-05-26
 
