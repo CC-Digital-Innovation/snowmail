@@ -73,7 +73,7 @@ The code provided in this project is an open source example and should not be tr
 
 ## History
 
-- version 0.0.1 (initial release) - 2021/05/17
+- See [CHANGELOG.md](https://github.com/CC-Digital-Innovation/snowmail/blob/main/CHANGELOG.md)
 
 ## Credits
 
