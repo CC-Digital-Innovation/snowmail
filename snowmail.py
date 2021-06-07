@@ -5,9 +5,9 @@ Snowmail ServiceNow Email Helper
 
 Usage:
     snowmail.py
-    snowmail.py create (--name <NAME> --email <EMAIL> --subject <SUBJECT> --body <BODY>)
-    snowmail.py update (--incident <INC#> --name <NAME> --email <EMAIL> --subject <SUBJECT> --body <BODY>)
-    snowmail.py status (--incident <INC#> --name <NAME> --email <EMAIL>)
+    snowmail.py create (--name <NAME> --email <EMAIL> --phone <PHONE> --subject <SUBJECT> --body <BODY>)
+    snowmail.py update (--incident <INC#> --name <NAME> --email <EMAIL> --phone <PHONE> --subject <SUBJECT> --body <BODY>)
+    snowmail.py status (--incident <INC#> --name <NAME> --email <EMAIL> --phone <PHONE>)
 
 Arguments:
     crete           Create new incident.
@@ -20,6 +20,7 @@ Options:
     --incident      Incident number.
     --name          Sender full name.
     --email         Sender Email.
+    --phone         Phone Number.
     --subject       Email Subject.
     --body          Email body.
 '''
@@ -106,11 +107,11 @@ def main():
         __doc__, version=cfg.__description__ + " - " + cfg.__version__)
     logger.trace(arguments)
     if arguments['create']:
-        create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
     elif arguments['update']:
-        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
     elif arguments['status']:
-        status(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'])
+        status(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'])
     else:
         print(arguments)
         exit("{0} is not a command. \
@@ -119,14 +120,14 @@ def main():
 
 
 @logger.catch
-def create(sender_name, sender_email, short_description, long_description):
+def create(sender_name, sender_email, sender_phone, short_description, long_description):
     email_check(sender_email)
     sender_lang = detect_lang(short_description, long_description)
     logger.debug(sender_lang)
     english_translation = native2english(*sender_lang)
-    incident = create_inc(sender_name, sender_email, *english_translation)
+    incident = create_inc(sender_name, sender_email, sender_phone, *english_translation)
     logger.debug(incident)
-    ack = prepare_ack(sender_name, sender_email, incident, native_lang,
+    ack = prepare_ack(sender_name, sender_email, sender_phone, incident, native_lang,
                       short_description, long_description, *english_translation)
     logger.debug(ack)
     send_ack(sender_name, sender_email, *ack)
@@ -230,7 +231,7 @@ def native2english(short_description, long_description, short_desc_native_lang, 
 
 # Function to translate form english to native language
 @logger.catch
-def prepare_ack(sender_name, sender_email, incident, native_lang, short_description, long_description, short_eng_desc, long_eng_desc):
+def prepare_ack(sender_name, sender_email, sender_phone, incident, native_lang, short_description, long_description, short_eng_desc, long_eng_desc):
     # TODO: Add parsed phone number(s)
     logger.info("english2native")
     ack_subject = 'MSA SmartTech Support Incident {incident} Created'.format(
@@ -242,10 +243,11 @@ def prepare_ack(sender_name, sender_email, incident, native_lang, short_descript
                             Incident Number: {incident}
                             Sender Name: {sender_name}
                             Sender Email: {sender_email}
+                            Sender Phone Number: {sender_phone}
                             Native Language: {native_lang}
                             Subject ({native_lang}): {short_description}
                             Message ({native_lang}): {long_description}\
-                            ''').format(sender_name=sender_name, sender_email=sender_email, incident=incident, native_lang=native_lang, short_description=short_description, long_description=long_description)
+                            ''').format(sender_name=sender_name, sender_email=sender_email, sender_phone=sender_phone, incident=incident, native_lang=native_lang, short_description=short_description, long_description=long_description)
     ack_en_message = textwrap.dedent('''\
                             \n
                             English Translation:
@@ -342,7 +344,7 @@ def snow_incident_client():
 
 
 @logger.catch
-def create_inc(sender_name, sender_email, short_description, long_description):
+def create_inc(sender_name, sender_email, sender_phone, short_description, long_description):
     # Create client object
     incident = snow_incident_client()
 
@@ -356,6 +358,7 @@ def create_inc(sender_name, sender_email, short_description, long_description):
         'u_account_executive': AE,
         'u_fedex_caller': sender_name,
         'u_msa_caller_email': sender_email,
+        'u_callers_phone_number': sender_phone,
         'short_description': short_description,
         'description': long_description
     }
@@ -374,6 +377,7 @@ def create_inc(sender_name, sender_email, short_description, long_description):
 @logger.catch
 def update_inc(sender_name, sender_email, inc_number, comment):
     # TODO: Create SNOW update function
+    # TODO: Translation services
     logger.info ("Incident update")
 
     # Create client object
@@ -390,6 +394,7 @@ def update_inc(sender_name, sender_email, inc_number, comment):
 @logger.catch
 def status_inc(inc_number):
     # TODO: Create SNOW status function
+    # TODO: Translation services
     logger.info ("Incident status")
 
     # Create client object

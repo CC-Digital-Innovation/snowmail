@@ -3,13 +3,18 @@
 ## [Unreleased]
 
 - TODO
-  - Function to parse phone numbers (need to think about the regex I am going to use given various different phone number formats and user input variances)
   - Cleanup docopt documentation
   - Add all comments to status ack message
   - Add more detail to status ack (e.g. - incident age)
   - Status and language translation
   - Update ack message which contains all comment details, current update and status information
   - Update ack message language translation
+
+## [0.1.0] - 2021-06-07
+
+### Added
+
+- Caller phone number parser
 
 ## [0.0.9] - 2021-05-27
 

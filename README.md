@@ -36,9 +36,9 @@ Snowmail ServiceNow Email Helper
 
 Usage:
     snowmail.py
-    snowmail.py create (--name <NAME> --email <EMAIL> --subject <SUBJECT> --body <BODY>)
-    snowmail.py update (--incident <INC#> --name <NAME> --email <EMAIL> --subject <SUBJECT> --body <BODY>)
-    snowmail.py status (--incident <INC#> --name <NAME> --email <EMAIL>)
+    snowmail.py create (--name <NAME> --email <EMAIL> --phone <PHONE> --subject <SUBJECT> --body <BODY>)
+    snowmail.py update (--incident <INC#> --name <NAME> --email <EMAIL> --phone <PHONE> --subject <SUBJECT> --body <BODY>)
+    snowmail.py status (--incident <INC#> --name <NAME> --email <EMAIL> --phone <PHONE>)
 
 Arguments:
     crete           Create new incident.
@@ -51,6 +51,7 @@ Options:
     --incident      Incident number.
     --name          Sender full name.
     --email         Sender Email.
+    --phone         Phone Number.
     --subject       Email Subject.
     --body          Email body.
 ```

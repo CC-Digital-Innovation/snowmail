@@ -42,6 +42,7 @@ set SUBJECT_CMD=%5
 set SUBJECT_INC=%6
 set BODY_CMD=%7
 set BODY_INC=%8
+set PHONE_NUM=%9
 
 
 @REM DEBUG
@@ -53,6 +54,7 @@ set BODY_INC=%8
 @echo "%mydate%:%mytime% | DEBUG | Subject INC: %SUBJECT_INC%"
 @echo "%mydate%:%mytime% | DEBUG | Body CMD: %BODY_CMD%"
 @echo "%mydate%:%mytime% | DEBUG | Body INC: %BODY_INC%"
+@echo "%mydate%:%mytime% | DEBUG | Phone Number: %PHONE_NUM%"
 
 @REM Set CMD and INC varaibles
 if /i %SUBJECT_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | SUbject CMD: NULL")
@@ -85,19 +87,19 @@ exit /b %ERRORLEVEL%
 :status
     rem Run a python script in that environment
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%"
-    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL%
+    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --phone %PHONE_NUM%
     echo %ERRORLEVEL%
     GOTO :END
 
 :update
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %INC%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
-    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    start /wait python snowmail.py %CMD% --incident %INC% --name %NAME% --email %EMAIL% --phone %PHONE_NUM% --subject %SUBJECT% --body %BODY%
     echo %ERRORLEVEL%
     GOTO :END
 
 :create
     echo "%mydate%:%mytime% | DEBUG | %CMD%, %NAME%, %EMAIL%, %SUBJECT%, %BODY%"
-    start /wait python snowmail.py %CMD% --name %NAME% --email %EMAIL% --subject %SUBJECT% --body %BODY%
+    start /wait python snowmail.py %CMD% --name %NAME% --email %EMAIL% --phone %PHONE_NUM% --subject %SUBJECT% --body %BODY%
     echo %ERRORLEVEL%
     GOTO :END
 
