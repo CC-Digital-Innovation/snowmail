@@ -17,11 +17,11 @@
 - get_body function to get email body from temp
 - __body_temp_file__ variable to _config.py
 
-###
+### Fixed
 
 - Worked around issue with batch file requirement wrapper and ability to pass multi-line variables
-
-- Caller phone number parser
+- Caller phone numebr regex updated in mail parser to parse more phone number variants: (\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3,4}\)?[\s.-]?\d{3,4}[\s.-]?\d{4}
+- Updated paths in _config.py
 
 ## [0.1.0] - 2021-06-07
 
