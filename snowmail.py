@@ -30,6 +30,7 @@ import _config as cfg
 import configparser
 import pysnow
 import re
+import os
 import sys
 import textwrap
 import json
@@ -107,9 +108,15 @@ def main():
         __doc__, version=cfg.__description__ + " - " + cfg.__version__)
     logger.trace(arguments)
     if arguments['create']:
-        create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        # BUG: Comment out the following line and added get_body function as a workaround for multi-line variables which are unable to be passed from the batch file wrapper
+        # create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        EMAIL_BODY = get_body()
+        create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
     elif arguments['update']:
-        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        # BUG: Comment out the following line and added get_body function as a workaround for multi-line variables which are unable to be passed from the batch file wrapper
+        # update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
+        EMAIL_BODY = get_body()
+        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
     elif arguments['status']:
         status(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'])
     else:
@@ -117,6 +124,24 @@ def main():
         exit("{0} is not a command. \
           See 'snowmail.py --help'.".format(arguments['<command>']))
     exit(0)
+
+
+@logger.catch
+def get_body():
+    # BUG: Added this function to read body from body.tmp as a workaround for windows bug where python env needs to be setup and requires a batch file wrapper to do so
+    # TODO: Work on a fix for the batch file wrapper and refactor and cleanup code
+    # Open text file in read mode
+    text_file = open("c:/temp/body.tmp", "r")
+    # Read whole file to a string
+    data = text_file.read()
+    # Close file
+    text_file.close()
+    # Remove empty lines and print output
+    data = os.linesep.join([s for s in data.splitlines() if s])
+    logger.info(data)
+    # Remove temp file
+    os.remove("c:/temp/body.tmp")
+    return(data)
 
 
 @logger.catch
