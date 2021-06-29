@@ -10,6 +10,19 @@
   - Update ack message which contains all comment details, current update and status information
   - Update ack message language translation
 
+## [0.1.1] - 2021-06-29
+
+### Added
+
+- get_body function to get email body from temp
+- __body_temp_file__ variable to _config.py
+
+###
+
+- Worked around issue with batch file requirement wrapper and ability to pass multi-line variables
+
+- Caller phone number parser
+
 ## [0.1.0] - 2021-06-07
 
 ### Added

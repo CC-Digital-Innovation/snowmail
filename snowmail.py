@@ -131,7 +131,7 @@ def get_body():
     # BUG: Added this function to read body from body.tmp as a workaround for windows bug where python env needs to be setup and requires a batch file wrapper to do so
     # TODO: Work on a fix for the batch file wrapper and refactor and cleanup code
     # Open text file in read mode
-    text_file = open("c:/temp/body.tmp", "r")
+    text_file = open(cfg.__body_temp_file__, "r")
     # Read whole file to a string
     data = text_file.read()
     # Close file
@@ -140,7 +140,7 @@ def get_body():
     data = os.linesep.join([s for s in data.splitlines() if s])
     logger.info(data)
     # Remove temp file
-    os.remove("c:/temp/body.tmp")
+    os.remove(cfg.__body_temp_file__)
     return(data)
 
 

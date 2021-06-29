@@ -58,9 +58,9 @@ set PHONE_NUM=%9
 
 @REM Set CMD and INC varaibles
 if /i %SUBJECT_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | SUbject CMD: NULL")
-if /i %BODY_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
+@REM if /i %BODY_CMD%=="status" (set CMD="status") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
 if /i %SUBJECT_CMD%=="update" (set CMD="update") else (echo "%mydate%:%mytime% | DEBUG | SUbject CMD: NULL")
-if /i %BODY_CMD%=="update" (set CMD="update") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
+@REM if /i %BODY_CMD%=="update" (set CMD="update") else (echo "%mydate%:%mytime% | DEBUG | Body CMD: NULL")
 if /i %CMD%=="" (set CMD="create") else (echo "%mydate%:%mytime% | DEBUG | CMD: %CMD%")
 
 if /i %SUBJECT_INC%=="" (echo "%mydate%:%mytime% | DEBUG | SUbject INC: NULL") else (set INC=%SUBJECT_INC%)
