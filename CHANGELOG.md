@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD024 -->
 # Changelog
 
 ## [Unreleased]
@@ -140,4 +141,4 @@
 - Creation of ccxs.support domain; required A, C, and MX DNS records
 - SMTP services
 - Creation of msa@ccxs.support email address
-- Configuration of Email Parser (https://www.emailparser.com/)
+- [Configuration of Email Parser](https://www.emailparser.com/)
