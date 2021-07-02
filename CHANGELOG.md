@@ -11,7 +11,7 @@
   - Update ack message which contains all comment details, current update and status information
   - Update ack message language translation
 
-## [0.1.2] - 2021-06-29
+## [0.1.2] - 2021-07-02
 
 ### Added
 
