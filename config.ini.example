@@ -43,7 +43,8 @@ smtp_sender             : ServiceBot@foo.bar
 ; https://docs.servicenow.com/bundle/paris-application-development/page/build/applications/concept/api-rest.html
 ; Requires pysnow library: https://pysnow.readthedocs.io/en/latest/
 ; ServiceNow Instance
-instance                : yourInstance
+dev_instance                : yourInstance
+prod_instance                : yourInstance
 ; ServiceNow API user
 user                    : your.user
 ; ServiceNow API password
