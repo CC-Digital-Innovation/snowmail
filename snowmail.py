@@ -111,14 +111,17 @@ def main():
         # BUG: Comment out the following line and added get_body function as a workaround for multi-line variables which are unable to be passed from the batch file wrapper
         # create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
         EMAIL_BODY = get_body()
-        create(arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
+        create(arguments['<NAME>'], arguments['<EMAIL>'],
+               arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
     elif arguments['update']:
         # BUG: Comment out the following line and added get_body function as a workaround for multi-line variables which are unable to be passed from the batch file wrapper
         # update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], arguments['<BODY>'])
         EMAIL_BODY = get_body()
-        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
+        update(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'],
+               arguments['<PHONE>'], arguments['<SUBJECT>'], EMAIL_BODY)
     elif arguments['status']:
-        status(arguments['<INC#>'], arguments['<NAME>'], arguments['<EMAIL>'], arguments['<PHONE>'])
+        status(arguments['<INC#>'], arguments['<NAME>'],
+               arguments['<EMAIL>'], arguments['<PHONE>'])
     else:
         print(arguments)
         exit("{0} is not a command. \
@@ -150,7 +153,8 @@ def create(sender_name, sender_email, sender_phone, short_description, long_desc
     sender_lang = detect_lang(short_description, long_description)
     logger.debug(sender_lang)
     english_translation = native2english(*sender_lang)
-    incident = create_inc(sender_name, sender_email, sender_phone, *english_translation)
+    incident = create_inc(sender_name, sender_email,
+                          sender_phone, *english_translation)
     logger.debug(incident)
     ack = prepare_ack(sender_name, sender_email, sender_phone, incident, native_lang,
                       short_description, long_description, *english_translation)
@@ -164,6 +168,7 @@ def update(inc_number, sender_name, sender_email, short_description, long_descri
     logger.debug("Update function")
     email_check(sender_email)
     update_inc(sender_name, sender_email, inc_number, long_description)
+
 
 @logger.catch
 def status(inc_number, sender_name, sender_email):
@@ -179,7 +184,8 @@ def status(inc_number, sender_name, sender_email):
 @logger.catch
 def print_json(json_data):
     formatted_json = json.dumps(json_data, sort_keys=True, indent=4)
-    colorful_json = highlight(formatted_json, lexers.JsonLexer(), formatters.TerminalFormatter())
+    colorful_json = highlight(
+        formatted_json, lexers.JsonLexer(), formatters.TerminalFormatter())
     print(colorful_json)
 
 
@@ -403,7 +409,7 @@ def create_inc(sender_name, sender_email, sender_phone, short_description, long_
 def update_inc(sender_name, sender_email, inc_number, comment):
     # TODO: Create SNOW update function
     # TODO: Translation services
-    logger.info ("Incident update")
+    logger.info("Incident update")
 
     # Create client object
     incident = snow_incident_client()
@@ -420,7 +426,7 @@ def update_inc(sender_name, sender_email, inc_number, comment):
 def status_inc(inc_number):
     # TODO: Create SNOW status function
     # TODO: Translation services
-    logger.info ("Incident status")
+    logger.info("Incident status")
 
     # Create client object
     incident = snow_incident_client()
