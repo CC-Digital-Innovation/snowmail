@@ -367,6 +367,13 @@ def smtp(name, email, subject, message):
 
 @logger.catch
 def snow_incident_client():
+    # Determine run mode
+    if (RUN_MODE == "PROD"):
+        SNOW_INSTANCE = SNOW_PROD_INSTANCE
+    elif (RUN_MODE == "DEV"):
+        SNOW_INSTANCE =- SNOW_DEV_INSTANCE
+    else:
+        (logger.error("Invaid Run Mode"))
     # Create incident client object
     c = pysnow.Client(instance=(SNOW_INSTANCE), user=(
         SNOW_API_USER), password=(SNOW_API_PASSWORD))
