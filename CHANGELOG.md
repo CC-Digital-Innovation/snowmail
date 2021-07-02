@@ -11,6 +11,12 @@
   - Update ack message which contains all comment details, current update and status information
   - Update ack message language translation
 
+## [0.1.2] - 2021-06-29
+
+### Added
+
+- Code to select ServiceNow instance based on defined run mode
+
 ## [0.1.1] - 2021-06-29
 
 ### Added
