@@ -76,7 +76,8 @@ SMTP_NAME = CONFIG['SMTP']['smtp_name']
 SMTP_SENDER = CONFIG['SMTP']['smtp_sender']
 
 # ServiceNow API Details
-SNOW_INSTANCE = CONFIG['SNOW API']['instance']
+SNOW_DEV_INSTANCE = CONFIG['SNOW API']['dev_instance']
+SNOW_PROD_INSTANCE = CONFIG['SNOW API']['prod_instance']
 SNOW_API_USER = CONFIG['SNOW API']['user']
 SNOW_API_PASSWORD = CONFIG['SNOW API']['password']
 # Tables
